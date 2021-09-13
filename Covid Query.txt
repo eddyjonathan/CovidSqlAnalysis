@@ -1,0 +1,69 @@
+# Glimpse at the data
+
+SELECT *
+FROM cvd.scovid
+where location is not null 
+order by location;
+
+
+## Q1 the country with the bigest death rate compared to the infected people ?
+
+select location,
+        max(total_cases) as total_case,
+     round((max(total_deaths)/ Max(total_cases))*100) as death_ratio
+from cvd.scovid 
+where location is not null 
+group by 1
+order by 3 desc
+
+# Vanuatu is the one.
+
+
+## Q2 Which country has the maximum percent of infection, the population and the maximum vacinated ?
+
+select location,
+       max(people_fully_vaccinated) as maximum_vaccinated,
+       max(population) as population,
+     round((max(total_cases)/ Max(population))*100) as Percent_Of_Infections
+from cvd.scovid 
+where location is not null 
+group by 1
+order by 4 desc
+
+#The seychelles are Nber 1.
+
+
+# Q3 lets have a look at the countries that have the most vaccinated population.
+
+select location,
+       max(people_fully_vaccinated) as maximum_vaccinated,
+       max(population) as population,
+     round((max(people_fully_vaccinated)/ Max(population))*100) as Vaccination_ratio
+from cvd.scovid 
+where location is not null 
+group by 1
+having Vaccination_ratio <100
+order by 4 desc
+
+# Malta seem handeling it well.
+
+
+
+## I want to create a table that let us know the number of peple vaccinated,
+# the ratio against the popupation, the people infected and the average death.
+
+
+select location,
+       max(people_fully_vaccinated) as fully_vaccinated,
+       Round((max(people_fully_vaccinated)/max(population)) *100) as Vaccination_ratio,
+       Max(total_cases) as People_infected,
+       Max(population) as population,
+       round(avg(total_deaths)) as AVG_Death
+     from cvd.scovid 
+where location is not null 
+group by 1
+having Vaccination_ratio <100
+order by 3 desc 
+
+
+#tableau would give us more clear insight. 
